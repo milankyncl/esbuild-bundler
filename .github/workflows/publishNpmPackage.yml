@@ -1,0 +1,20 @@
+name: Publish Package to npmjs.org
+on:
+  release:
+    types: [created]
+jobs:
+  release-npm-package:
+    name: Build and release NPM package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

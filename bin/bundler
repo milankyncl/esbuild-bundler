@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const rimraf = require('rimraf');
+
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+
+const alias = require("esbuild-plugin-alias");
+const esbuild = require("esbuild");
+
+const { success, info } = require('../logger');
+const { failWithError } = require('../utils');
+const { resolvePreset } = require('../presets');
+
+const argv = yargs(hideBin(process.argv)).argv;
+const cwd = process.cwd();
+
+const { bundler } = require(path.join(cwd, './package.json'));
+const { entryPoints, aliases } = bundler;
+
+if (entryPoints === undefined) {
+    failWithError('You need to define at least one bundler entrypoint');
+}
+if (!Array.isArray(entryPoints) || entryPoints.some((ep) => typeof ep !== 'string')) {
+    failWithError('Invalid entrypoint configuration');
+}
+
+const { production, preset, outDir: argOutDir } = argv;
+const isProduction = production === true;
+
+const { plugins = [], platform } = resolvePreset(preset);
+
+const outDir = path.resolve(cwd, (argOutDir ?? confOutDir) ?? './dist');
+
+if (aliases) {
+    if (typeof aliases !== 'object') {
+        failWithError('"aliases" must be an object in config');
+    }
+    plugins.push(
+        alias(Object.values(aliases).reduce((aliases, [alias, aliasPath]) => ({
+            ...aliases,
+            [alias]: path.resolve(cwd, aliasPath),
+        }), {})),
+    );
+}
+
+const config = {
+    entryPoints,
+    plugins,
+    outdir: outDir,
+    bundle: true,
+    platform: platform,
+    sourcemap: 'linked',
+}
+
+
+if (isProduction) {
+    info('Building in production mode...');
+    config.minify = true;
+    config.legalComments = 'none';
+}
+
+const startedAt = new Date();
+rimraf.sync(outDir);
+esbuild.build(config)
+    .catch((err) => failWithError('Something has gone wrong when building the code!', err))
+    .then(() => success(`Success! Built in: ${(new Date() - startedAt).toFixed(0)}ms.`));

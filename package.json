@@ -1,0 +1,18 @@
+{
+  "name": "esbuild-bundler",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:milankyncl/esbuild-bundler.git",
+  "author": "Milan Kyncl <hello@milankyncl.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^4.1.2",
+    "esbuild": "^0.17.11",
+    "esbuild-plugin-alias": "^0.2.1",
+    "rimraf": "^4.4.0",
+    "yargs": "^17.7.1"
+  },
+  "bin": {
+    "bundler": "bin/bundler"
+  }
+}
