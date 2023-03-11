@@ -5,7 +5,7 @@
   "repository": "git@github.com:milankyncl/esbuild-bundler.git",
   "author": "Milan Kyncl <hello@milankyncl.dev>",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "chalk": "^4.1.2",
     "esbuild": "^0.17.11",
     "esbuild-plugin-alias": "^0.2.1",
