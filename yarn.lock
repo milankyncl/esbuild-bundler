@@ -2,6 +2,28 @@
 # yarn lockfile v1
 
 
+"@es-exec/esbuild-plugin-start@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@es-exec/esbuild-plugin-start/-/esbuild-plugin-start-0.0.4.tgz#9ff8672d3cc302cda1d55524e2a8597470f7509a"
+  integrity sha512-FOV4p6sbDz87IYsVU2MPNiVCABOLgoS8xsKpjYmjznM2xPAehGdoAdjGm9HQXKaquQiBeplFOCGnmz6KBRqBKA==
+  dependencies:
+    "@es-exec/plugins-shared" "^0.0.4"
+    "@es-exec/utils" "^0.0.4"
+
+"@es-exec/plugins-shared@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@es-exec/plugins-shared/-/plugins-shared-0.0.4.tgz#a68df12ac9e3588756a5e303b5d3b16daf473e7f"
+  integrity sha512-F6sOXsXtgk/VenrOts0OVGBUL85aJ0HC05IhiTLo3pZxnv2z7xcKBPKUJn2Bl+E9aSzeCoCXNIiaz/tLgEWMRg==
+  dependencies:
+    "@es-exec/utils" "^0.0.4"
+
+"@es-exec/utils@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@es-exec/utils/-/utils-0.0.4.tgz#383acbb5e4bc13dae0e3addfb2f0c4aecbb58de6"
+  integrity sha512-8eGzCh/kayYGW1v1SnebV6FVC2e49luA256bWqJUz1QMcEU6U8nauy2QxLMCTE4RG0R7KeN8Tn9IGr1yMsaF4Q==
+  dependencies:
+    chalk "4.1.2"
+
 "@esbuild/android-arm64@0.17.11":
   version "0.17.11"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.17.11.tgz#52c3e6cabc19c5e4c1c0c01cb58f0442338e1c14"
@@ -136,7 +158,7 @@ brace-expansion@^2.0.1:
   dependencies:
     balanced-match "^1.0.0"
 
-chalk@^4.1.2:
+chalk@4.1.2, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==

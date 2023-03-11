@@ -6,6 +6,7 @@
   "author": "Milan Kyncl <hello@milankyncl.dev>",
   "license": "MIT",
   "dependencies": {
+    "@es-exec/esbuild-plugin-start": "^0.0.4",
     "chalk": "^4.1.2",
     "esbuild": "^0.17.11",
     "esbuild-plugin-alias": "^0.2.1",

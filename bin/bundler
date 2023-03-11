@@ -6,6 +6,7 @@ const rimraf = require('rimraf');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
+const { default: start } = require('@es-exec/esbuild-plugin-start');
 const alias = require("esbuild-plugin-alias");
 const esbuild = require("esbuild");
 
@@ -17,7 +18,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 const cwd = process.cwd();
 
 const { bundler } = require(path.join(cwd, './package.json'));
-const { entryPoints, aliases } = bundler;
+const { entryPoints, aliases, execScript, outDir: confOutDir = './dist', preset: confPreset } = bundler;
 
 if (entryPoints === undefined) {
     failWithError('You need to define at least one bundler entrypoint');
@@ -26,12 +27,12 @@ if (!Array.isArray(entryPoints) || entryPoints.some((ep) => typeof ep !== 'strin
     failWithError('Invalid entrypoint configuration');
 }
 
-const { production, preset, outDir: argOutDir } = argv;
+const { production, watch, outDir: argOutDir, preset: argPreset } = argv;
 const isProduction = production === true;
 
-const { plugins = [], platform } = resolvePreset(preset);
+const { plugins = [], platform } = resolvePreset(argPreset ?? confPreset);
 
-const outDir = path.resolve(cwd, (argOutDir ?? confOutDir) ?? './dist');
+const outDir = path.resolve(cwd, argOutDir ?? confOutDir);
 
 if (aliases) {
     if (typeof aliases !== 'object') {
@@ -45,12 +46,23 @@ if (aliases) {
     );
 }
 
+if (watch) {
+    if (!execScript) {
+        failWithError('"execScript" must be defined in config to run in watch mode');
+    }
+    plugins.push(
+        start({
+            script: execScript,
+        })
+    );
+}
+
 const config = {
     entryPoints,
     plugins,
     outdir: outDir,
     bundle: true,
-    platform: platform,
+    platform,
     sourcemap: 'linked',
 }
 
@@ -61,8 +73,15 @@ if (isProduction) {
     config.legalComments = 'none';
 }
 
-const startedAt = new Date();
-rimraf.sync(outDir);
-esbuild.build(config)
-    .catch((err) => failWithError('Something has gone wrong when building the code!', err))
-    .then(() => success(`Success! Built in: ${(new Date() - startedAt).toFixed(0)}ms.`));
+if (watch) {
+    info('Running in watch mode...');
+    esbuild.context(config)
+        .then((c) => c.watch())
+        .catch((err) => failWithError('Something had failed during dev mode!', err));
+} else {
+    const startedAt = new Date();
+    rimraf.sync(outDir);
+    esbuild.build(config)
+        .catch((err) => failWithError('Something has gone wrong when building the code!', err))
+        .then(() => success(`Success! Built in: ${(new Date() - startedAt).toFixed(0)}ms.`));
+}
