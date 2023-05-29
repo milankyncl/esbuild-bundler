@@ -18,7 +18,7 @@ const argv = yargs(hideBin(process.argv)).argv;
 const cwd = process.cwd();
 
 const { bundler } = require(path.join(cwd, './package.json'));
-const { entryPoints, aliases, execScript, outDir: confOutDir = './dist', preset: confPreset } = bundler;
+const { entryPoints, aliases, execScript, outDir: confOutDir = './dist', preset: confPreset, external } = bundler;
 
 if (entryPoints === undefined) {
     failWithError('You need to define at least one bundler entrypoint');
@@ -64,6 +64,7 @@ const config = {
     bundle: true,
     platform,
     sourcemap: 'linked',
+		external,
 }
 
 
